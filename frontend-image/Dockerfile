@@ -16,14 +16,20 @@ COPY . .
 # Construir la aplicación Angular
 RUN npm run build --prod
 
-# Etapa 2: Servir la aplicación
-FROM nginx:alpine
+# Etapa 2: Servir la aplicación con Angular CLI (sin Nginx)
+FROM node:20-alpine
 
-# Copiar los archivos construidos desde la etapa anterior al servidor Nginx
-COPY --from=build /app/dist/liquid-store-web /usr/share/nginx/html
+# Establecer el directorio de trabajo en el contenedor
+WORKDIR /app
 
-# Exponer el puerto 80
-EXPOSE 80
+# Copiar los archivos construidos desde la etapa anterior al contenedor
+COPY --from=build /app/dist/liquid-store-web /app/dist/liquid-store-web
 
-# Comando por defecto para iniciar Nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Instalar Angular CLI en el contenedor
+RUN npm install -g @angular/cli
+
+# Exponer el puerto que Angular usa por defecto (4200)
+EXPOSE 4200
+
+# Comando para iniciar el servidor de desarrollo de Angular
+CMD ["ng serve", "--host", "0.0.0.0", "--port", "4200"]
