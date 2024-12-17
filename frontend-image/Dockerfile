@@ -8,6 +8,9 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 
+# Instalar Angular CLI globalmente dentro del contenedor
+RUN npm install -g @angular/cli
+
 # Copia la carpeta dist/ del proyecto Angular al contenedor
 COPY dist/ ./dist/
 
