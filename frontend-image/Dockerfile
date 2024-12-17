@@ -1,21 +1,16 @@
-# Base image
-FROM node:19-alpine
+# Usar la imagen base de Node.js
+FROM node:20.11.1
 
-# Establece el directorio de trabajo dentro del contenedor
+# Crear el directorio de la app en el contenedor
+RUN mkdir -p /app
+
+# Establecer /app como el directorio de trabajo
 WORKDIR /app
 
-# Copia los archivos necesarios al contenedor
-COPY package*.json ./
-RUN npm install
+# Instalar Angular CLI globalmente
+RUN npm install -g @angular/cli@18.2.4
 
-# Instalar Angular CLI globalmente dentro del contenedor
-RUN npm install -g @angular/cli
+# No copiar archivos ni ejecutar npm install porque el proyecto aún no está disponible
 
-# Copia la carpeta dist/ del proyecto Angular al contenedor
-COPY dist/ ./dist/
-
-# Expose the port the application runs on
-EXPOSE 4200
-
-# Comando para iniciar la aplicación
-CMD ["ng", "serve", "--host", "0.0.0.0", "--port", "4200"]
+# Comando por defecto al iniciar el contenedor
+CMD ["/bin/sh"]
