@@ -10,7 +10,8 @@ WORKDIR /app
 # Instalar Angular CLI globalmente
 RUN npm install -g @angular/cli@18.2.4
 
-# No copiar archivos ni ejecutar npm install porque el proyecto aún no está disponible
+# Expose the port the application runs on
+EXPOSE 8080
 
 # Comando por defecto al iniciar el contenedor
 CMD ["/bin/sh"]
