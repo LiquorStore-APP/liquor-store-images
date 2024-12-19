@@ -4,7 +4,10 @@ services:
   liquor-frontend:
     build:
       context: .
+      args:
+        - VOLUME_FRONTEND_PATH=${VOLUME_FRONTEND_PATH}
       dockerfile: Dockerfile
     ports:
       - "4200:80"
     container_name: liquor-frontend
+    restart: on-failure

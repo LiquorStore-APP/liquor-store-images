@@ -1,17 +1,37 @@
-# Usar la imagen base de Node.js
-FROM node:20.11.1
+# Etapa 1: Construcción
+FROM node:20.17.0-alpine AS build
 
-# Crear el directorio de la app en el contenedor
-RUN mkdir -p /app
-
-# Establecer /app como el directorio de trabajo
+# Establece el directorio de trabajo en el contenedor
+RUN mkdir /app
 WORKDIR /app
 
-# Instalar Angular CLI globalmente
-RUN npm install -g @angular/cli@18.2.4
+# Instala las dependencias
+RUN npm install
 
-# Expose the port the application runs on
-EXPOSE 8080
+ARG VOLUME_FRONTEND_PATH
+ENV VOLUME_FRONTEND_PATH ${VOLUME_FRONTEND_PATH}
+COPY $VOLUME_FRONTEND_PATH /app/
 
-# Comando por defecto al iniciar el contenedor
-CMD ["/bin/sh"]
+# Construye la aplicación Angular
+RUN ng build --configuration=production
+
+# Etapa 2: Servidor web para servir la aplicación
+FROM nginx:1.25.2-alpine
+
+# Instalar bash
+RUN apk add --no-cache bash
+
+# Copiar los archivos de la build desde la etapa anterior
+COPY --from=build /app/dist/liquor-store-web/browser/ /usr/share/nginx/html
+
+# Eliminar configuración por defecto de Nginx si no la necesitas
+RUN rm /etc/nginx/conf.d/default.conf
+
+# Configurar un archivo de configuración personalizado para Nginx
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# Expone el puerto 80 para el contenedor
+EXPOSE 80
+
+# Comando por defecto para iniciar Nginx
+CMD ["nginx", "-g", "daemon off;"]
