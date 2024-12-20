@@ -5,12 +5,12 @@ FROM node:20.17.0-alpine AS build
 RUN mkdir /app
 WORKDIR /app
 
-# Instala las dependencias
-RUN npm install
-
 #ARG VOLUME_FRONTEND_PATH
 #ENV VOLUME_FRONTEND_PATH ${VOLUME_FRONTEND_PATH}
 COPY liquor-store-web /app/
+
+# Instala las dependencias
+RUN npm install
 
 # Construye la aplicación Angular
 RUN ng build --configuration=production
