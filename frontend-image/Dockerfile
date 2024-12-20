@@ -9,6 +9,9 @@ WORKDIR /app
 #ENV VOLUME_FRONTEND_PATH ${VOLUME_FRONTEND_PATH}
 COPY liquor-store-web /app/
 
+# Instala Angular CLI globalmente
+RUN npm install -g @angular/cli
+
 # Instala las dependencias
 RUN npm install
 
