@@ -8,8 +8,8 @@ WORKDIR /app
 # Instala las dependencias
 RUN npm install
 
-ARG VOLUME_FRONTEND_PATH
-ENV VOLUME_FRONTEND_PATH ${VOLUME_FRONTEND_PATH}
+#ARG VOLUME_FRONTEND_PATH
+#ENV VOLUME_FRONTEND_PATH ${VOLUME_FRONTEND_PATH}
 COPY F:/DOCUMENTOS/LiquorStore-APP/liquor-store-deploy-utils/frontend/liquor-store-web /app/
 
 # Construye la aplicación Angular
