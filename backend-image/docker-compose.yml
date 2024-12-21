@@ -11,3 +11,7 @@ services:
       - ./logs:/app/logs # Montaje de volúmenes para los logs
     container_name: liquor-backend
     restart: on-failure
+    environment:
+      DB_URL: jdbc:mysql://host.docker.internal:3306/prueba
+      DB_USERNAME: root
+      DB_PASSWORD: '#Cr1s714n#'
