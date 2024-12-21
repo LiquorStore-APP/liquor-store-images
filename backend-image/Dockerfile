@@ -14,7 +14,7 @@ RUN mvn dependency:go-offline -B
 COPY liquor-store-api/src ./src
 
 # Compila el proyecto y genera el .jar
-RUN mvn clean package -DskipTests -e
+RUN mvn clean package -DskipTests -e -X
 
 # Etapa 2: Ejecución
 FROM openjdk:17-jdk
