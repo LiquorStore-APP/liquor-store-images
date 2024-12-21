@@ -27,8 +27,6 @@ RUN apk add --no-cache bash
 # Copiar los archivos de la build desde la etapa anterior
 COPY --from=build /app/dist/liquor-store-web/browser/ /usr/share/nginx/html
 
-COPY environment.json /usr/share/nginx/html/assets/environment.json
-
 # Eliminar configuración por defecto de Nginx si no la necesitas
 RUN rm /etc/nginx/conf.d/default.conf
 
