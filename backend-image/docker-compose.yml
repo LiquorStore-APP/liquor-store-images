@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  liquor-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "4300:8080"
+    volumes:
+      - ./logs:/app/logs # Montaje de volúmenes para los logs
+    container_name: liquor-backend
+    restart: on-failure

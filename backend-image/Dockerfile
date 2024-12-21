@@ -1,13 +1,31 @@
-# Usar una imagen base de OpenJDK
-FROM openjdk:17-jdk-slim
+# Etapa 1: Construcción
+FROM maven:3.8.6-openjdk-17 AS builder
 
-# Establecer un directorio de trabajo
+# Establece el directorio de trabajo en el contenedor
 WORKDIR /app
 
-# Copiar el archivo JAR generado al contenedor
-COPY target/liquor-api-SNAPSHOT.jar app.jar
+# Copia el archivo pom.xml y las dependencias
+COPY liquor-store-api/pom.xml .
 
-# Exponer el puerto en el que se ejecuta tu aplicación
+# Descarga las dependencias necesarias
+RUN mvn dependency:go-offline -B
+
+# Copia el código fuente del proyecto
+COPY liquor-store-api/src ./src
+
+# Compila el proyecto y genera el .jar
+RUN mvn clean package -DskipTests
+
+# Etapa 2: Ejecución
+FROM openjdk:17-jdk-slim
+
+# Establece el directorio de trabajo
+WORKDIR /app
+
+# Copia el archivo JAR generado desde la etapa de construcción
+COPY --from=builder /app/target/*.jar app.jar
+
+# Expone el puerto en el que corre la aplicación
 EXPOSE 8080
 
 # Comando para ejecutar la aplicación
